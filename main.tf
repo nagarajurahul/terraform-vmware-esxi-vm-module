@@ -10,17 +10,50 @@ provider "esxi" {
   esxi_password = var.esxi_password
 }
 
-resource "esxi_guest" "vmtest" {
-  guest_name         = "vmtest"
-  disk_store         =  var.disk_store
+data "template_file" "userdata_default" {
+  template = file("userdata.tpl")
+  vars = {
+    HOSTNAME = var.hostname
+    HELLO    = "Hello ESXi World!"
+  }
+}
 
-  #
-  #  Specify an existing guest to clone, an ovf source, or neither to build a bare-metal guest vm.
-  #
-  #clone_from_vm      = "Templates/centos7"
-  #ovf_source        = "/local_path/centos-7.vmx"
+resource "esxi_guest" "vmtest" {
+  guest_name         = var.hostname
+  disk_store         = var.disk_store
 
   network_interfaces {
-    virtual_network = var.virtual_network
+     virtual_network = var.virtual_network
   }
+
+  ovf_source        = var.ovf_file
+
+  ovf_properties {
+    key = "hostname"
+    value = var.hostname
+  }
+
+  ovf_properties {
+    key = "password"
+    value = var.password
+  }
+
+  ovf_properties {
+    key   = "instance-id"
+    value = "vm-${var.hostname}"
+  }
+
+  ovf_properties {
+    key = "user-data"
+    value = base64encode(data.template_file.userdata_default.rendered)
+  }
+
+  # Optional: fallback if guestinfo is preferred
+  guestinfo = {
+    "userdata.encoding" = "gzip+base64"
+    "userdata"          = base64gzip(data.template_file.userdata_default.rendered)
+  }
+
+  ovf_properties_timer = 90  # give VM time to boot & process OVF props
+
 }

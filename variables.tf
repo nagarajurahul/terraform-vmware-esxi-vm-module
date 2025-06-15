@@ -23,3 +23,23 @@ variable "virtual_network" {
 variable "disk_store" {
   
 }
+
+variable "guest_name" {
+  
+}
+
+variable "guestos" {
+  
+}
+
+variable "hostname" {
+  
+}
+
+variable "password" {
+  
+}
+
+variable "ovf_file" {
+  
+}
