@@ -15,6 +15,7 @@ data "template_file" "userdata_default" {
   vars = {
     HOSTNAME = var.hostname
     HELLO    = "Hello ESXi World!"
+    SSH_PUBLIC_KEY = var.ssh_public_key
   }
 }
 

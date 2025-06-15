@@ -43,3 +43,7 @@ variable "password" {
 variable "ovf_file" {
   
 }
+
+variable "ssh_public_key" {
+  
+}
