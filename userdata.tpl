@@ -4,7 +4,7 @@ users:
   - name: ubuntu
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     shell: /bin/bash
-    sh-authorized-keys:
+    ssh-authorized-keys:
       - ${SSH_PUBLIC_KEY}
 
 # Allow password login (required for OVF 'password' to work)
