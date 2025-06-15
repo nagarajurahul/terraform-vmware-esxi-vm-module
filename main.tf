@@ -16,6 +16,7 @@ data "template_file" "userdata_default" {
     HOSTNAME = var.vm_hostname
     HELLO    = "Hello ESXi World!"
     SSH_PUBLIC_KEY = var.ssh_public_key
+    PASSWORD = var.vm_password
   }
 }
 
@@ -24,7 +25,7 @@ resource "esxi_guest" "vm" {
   disk_store         = var.disk_store
 
   network_interfaces {
-     virtual_network = var.virtual_network
+    virtual_network = var.virtual_network
   }
 
   ovf_source        = var.ovf_file
@@ -37,7 +38,7 @@ resource "esxi_guest" "vm" {
   # Not working
   ovf_properties {
     key = "password"
-    value = var.password
+    value = var.vm_password
   }
 
   ovf_properties {

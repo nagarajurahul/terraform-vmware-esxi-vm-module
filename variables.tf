@@ -11,9 +11,11 @@ variable "esxi_hostssl" {
 }
 
 variable "esxi_username" {
+  sensitive   = true
 }
 
 variable "esxi_password" {
+  sensitive   = true
 }
 
 variable "virtual_network" {
@@ -36,8 +38,8 @@ variable "vm_hostname" {
   
 }
 
-variable "password" {
-  
+variable "vm_password" {
+  sensitive   = true
 }
 
 variable "ovf_file" {
@@ -45,5 +47,5 @@ variable "ovf_file" {
 }
 
 variable "ssh_public_key" {
-  
+  sensitive   = true
 }
