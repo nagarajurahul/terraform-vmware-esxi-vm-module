@@ -32,7 +32,7 @@ variable "disk_store" {
   
 # }
 
-variable "hostname" {
+variable "vm_hostname" {
   
 }
 

@@ -13,14 +13,14 @@ provider "esxi" {
 data "template_file" "userdata_default" {
   template = file("userdata.tpl")
   vars = {
-    HOSTNAME = var.hostname
+    HOSTNAME = var.vm_hostname
     HELLO    = "Hello ESXi World!"
     SSH_PUBLIC_KEY = var.ssh_public_key
   }
 }
 
-resource "esxi_guest" "vmtest" {
-  guest_name         = var.hostname
+resource "esxi_guest" "vm" {
+  guest_name         = var.vm_hostname
   disk_store         = var.disk_store
 
   network_interfaces {
@@ -31,7 +31,7 @@ resource "esxi_guest" "vmtest" {
 
   ovf_properties {
     key = "hostname"
-    value = var.hostname
+    value = var.vm_hostname
   }
 
   # Not working
@@ -42,7 +42,7 @@ resource "esxi_guest" "vmtest" {
 
   ovf_properties {
     key   = "instance-id"
-    value = "vm-${var.hostname}"
+    value = "vm-${var.vm_hostname}"
   }
 
   ovf_properties {
