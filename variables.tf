@@ -24,13 +24,13 @@ variable "disk_store" {
   
 }
 
-variable "guest_name" {
+# variable "guest_name" {
   
-}
+# }
 
-variable "guestos" {
+# variable "guestos" {
   
-}
+# }
 
 variable "hostname" {
   
