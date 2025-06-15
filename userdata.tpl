@@ -7,8 +7,29 @@ users:
     ssh-authorized-keys:
       - ${SSH_PUBLIC_KEY}
 
+  - name: rahul
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh-authorized-keys:
+      - ${SSH_PUBLIC_KEY}
+    lock_passwd: false
+    plain_text_passwd: ${PASSWORD}
+
 # Allow password login (required for OVF 'password' to work)
 ssh_pwauth: true
+
+
+chpasswd:
+  list: |
+    ubuntu:${PASSWORD}
+    rahul:${PASSWORD}
+  expire: False
+
+system_info:
+  default_user:
+    name: rahul
+    sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+    shell: /bin/bash
 
 packages:
   - curl

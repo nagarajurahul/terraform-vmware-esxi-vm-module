@@ -34,6 +34,7 @@ resource "esxi_guest" "vmtest" {
     value = var.hostname
   }
 
+  # Not working
   ovf_properties {
     key = "password"
     value = var.password
