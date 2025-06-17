@@ -54,7 +54,7 @@ provider "esxi" {
 }
 ```
 
-### 3️⃣ Customize terraform.tfvars
+### 3️⃣ Add module in your parent project
 
 ```bash
 
@@ -64,18 +64,18 @@ module "vm" {
   esxi_hostname   = "<your-esxi-hostname>"
   esxi_username   = "<your-esxi-username>"
   esxi_password   = "<your-esxi-password>"
-
-  ovf_file        = "noble-server-cloudimg-amd64.ova"
-  disk_store      = "datastore1"
+ 
   virtual_network = "VM Network"
+  disk_store      = "datastore1"
   vm_hostname     = "rahul-linux-1"
   vm_password     = "<your-vm-password>"
+  ovf_file        = "noble-server-cloudimg-amd64.ova"
   ssh_public_key  = "ssh-ed25519 AAAAC3...your-key...user@host"
 }
 ```
 
 
-### 4️⃣ Run Terraform
+### 4️⃣ Run Terraform for your parent project
 
 ```bash
 terraform init
