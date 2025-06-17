@@ -1,5 +1,5 @@
 data "template_file" "userdata_default" {
-  template = file("userdata.tpl")
+  template = file("${path.module}/userdata.tpl")
   vars = {
     HOSTNAME = var.vm_hostname
     HELLO    = "Hello ESXi World!"
