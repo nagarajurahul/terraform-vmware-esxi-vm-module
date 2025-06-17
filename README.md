@@ -49,7 +49,7 @@ provider "esxi" {
   esxi_hostname   = "<your-esxi-hostname>"
   esxi_hostport   = "22"
   esxi_hostssl    = "443"
-  esxi_username   = "root"
+  esxi_username   = "<your-esxi-username>"
   esxi_password   = "<your-esxi-password>"
 }
 ```
@@ -61,9 +61,9 @@ provider "esxi" {
 module "vm" {
   source = "git::https://github.com/nagarajurahul/terraform-vmware-esxi-vm-module.git"
 
-  esxi_hostname   = "<your-esxi-host>"
-  esxi_username   = "root"
-  esxi_password   = "<your-password>"
+  esxi_hostname   = "<your-esxi-hostname>"
+  esxi_username   = "<your-esxi-username>"
+  esxi_password   = "<your-esxi-password>"
 
   ovf_file        = "noble-server-cloudimg-amd64.ova"
   disk_store      = "datastore1"
