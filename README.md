@@ -10,15 +10,26 @@ Designed for **DevOps Engineers**, **Cloud Engineers**, or **Infrastructure Auto
 
 ---
 
-## 📦 What’s Included
+## 📦 What’s Inside This Module
 
-- Reusable Terraform module to create VMs from OVA
-- Inputs for hostname, SSH keys, cloud-init config, and disk/network options
-- `cloud-init` for:
-  - Adding users
-  - Installing packages
-  - Setting hostname and MOTD
-  - Injecting SSH keys
+- Terraform-managed ESXi VM lifecycle
+
+- Accepts:
+
+  - Custom vm_hostname, vm_password, and ssh_public_key
+
+  - Disk and virtual network configuration
+
+  - Path to .ova cloud image
+
+- Uses template_file to inject dynamic cloud-init content
+
+- Sends cloud-init via both:
+
+  - ovf_properties["user-data"]
+
+  - guestinfo.userdata (gzip+base64 fallback)
+
 - Does not include provider block — expected to be defined in the parent Terraform configuration
 
 ---
@@ -26,13 +37,14 @@ Designed for **DevOps Engineers**, **Cloud Engineers**, or **Infrastructure Auto
 ## ☁️ Requirements
 
 - **Terraform >= 0.12**
-- **ESXi (Free or Paid)**
-- **OVA file** (example: Ubuntu 24.04 cloud image)
-- **ovftool** installed (optional, for inspecting .ova)
+- **ESXi host (Free or Licensed)**
+- **josenk/esxi provider**
+- **Cloud-ready OVA file** (example: Ubuntu 24.04 cloud image)
+- **ovftool** installed
 
 ---
 
-## 🔧 Setup Instructions
+## 🔧 Setup Guide
 
 
 ### 1️⃣ Download a Cloud-Ready OVA
@@ -89,6 +101,15 @@ or
 terraform apply --var-file="custom.tfvars"
 ```
 
+---
+
+## 📜 Output
+
+- VM Hostname
+
+- VM IP address (once booted via DHCP)
+
+---
 
 ## 🧠 Notes & Tips
 
@@ -97,8 +118,9 @@ terraform apply --var-file="custom.tfvars"
 ❗ If password OVF property doesn't work, ensure:
 
 - User exists in cloud-init
-- lock_passwd: false is set
-- plain_text_passwd: is configured
+  - `chpasswd` must be configured
+  - or
+  - `lock_passwd: false` is set and `plain_text_passwd: <your-user-password>` is configured
 
 🧑‍💻 Best practice: Use SSH keys instead of plain passwords.
 
@@ -122,21 +144,20 @@ terraform apply --var-file="custom.tfvars"
 - 🔄 Post-provisioning automation using Ansible or remote-exec
 
 
-
 ---
 
 ## 📚 References
 
-Terraform Provider: <https://github.com/josenk/terraform-provider-esxi>
+- Terraform Provider: <https://github.com/josenk/terraform-provider-esxi>
 
-Ubuntu Cloud Images: <https://cloud-images.ubuntu.com>
+- Ubuntu Cloud Images: <https://cloud-images.ubuntu.com>
 
-Cloud-Init Docs: <https://cloudinit.readthedocs.io>
+- Cloud-Init Docs: <https://cloudinit.readthedocs.io>
 
 ## ✨ Author
 
-Rahul Nagaraju
-Cloud & DevOps Engineer
+**Rahul Nagaraju**
+- Cloud & DevOps Engineer
 
 ## 📄 License
 This project is licensed under the MIT License
