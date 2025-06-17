@@ -1,6 +1,6 @@
 # 🚀 ESXi VM Provisioning with Terraform + OVA + Cloud-Init
 
-This project demonstrates how to **automatically provision virtual machines on an ESXi hypervisor** using:
+This project provides a **reusable Terraform module** to **automatically provision virtual machines on an ESXi hypervisor** using:
 
 - ✅ **Terraform** (with [`josenk/terraform-provider-esxi` provider])
 - ✅ **OVA/OVF cloud images** (Ubuntu Cloud-Ready)
@@ -12,14 +12,14 @@ Designed for **DevOps Engineers**, **Cloud Engineers**, or **Infrastructure Auto
 
 ## 📦 What’s Included
 
-- Automated VM creation from OVA
-- Custom hostname, SSH keys, and optional passwords via OVF properties
+- Reusable Terraform module to create VMs from OVA
+- Inputs for hostname, SSH keys, cloud-init config, and disk/network options
 - `cloud-init` for:
   - Adding users
   - Installing packages
   - Setting hostname and MOTD
   - Injecting SSH keys
-- ESXi authentication via Terraform provider
+- Does not include provider block — expected to be defined in the parent Terraform configuration
 
 ---
 
@@ -34,47 +34,58 @@ Designed for **DevOps Engineers**, **Cloud Engineers**, or **Infrastructure Auto
 
 ## 🔧 Setup Instructions
 
-### 1️⃣ Clone This Repo
 
-```bash
-git clone https://github.com/nagarajurahul/terraform-vmware-esxi
-cd terraform-vmware-esxi
-```
-
-### 2️⃣ Download a Cloud-Ready OVA
+### 1️⃣ Download a Cloud-Ready OVA
 Get Ubuntu cloud images:
 
 ```bash
 wget https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.ova
 ```
 
+### 2️⃣ Define the provider (in parent project)
+
+```bash
+provider "esxi" {
+  esxi_hostname   = "<your-esxi-hostname>"
+  esxi_hostport   = "22"
+  esxi_hostssl    = "443"
+  esxi_username   = "root"
+  esxi_password   = "<your-esxi-password>"
+}
+```
 
 ### 3️⃣ Customize terraform.tfvars
 
 ```bash
-esxi_hostname   = "<your-esxi-hostname>"
-esxi_hostport   = "22"
-esxi_hostssl    = "443"
-esxi_username   = "root"
-esxi_password   = "<your-esxi-password>"
 
-disk_store      = "datastore1"
-virtual_network = "VM Network"
-ovf_file        = "<your-ova-file>.ova"
-vm_hostname     = "<rahul-linux-1>"
-vm_password     = "<your-vm-password>"
-ssh_public_key  = "ssh-ed25519 AAAAC3...your-key...user@host"
+module "vm" {
+  source = "git::https://github.com/nagarajurahul/terraform-vmware-esxi-vm-module.git"
+
+  esxi_hostname   = "<your-esxi-host>"
+  esxi_username   = "root"
+  esxi_password   = "<your-password>"
+
+  ovf_file        = "noble-server-cloudimg-amd64.ova"
+  disk_store      = "datastore1"
+  virtual_network = "VM Network"
+  vm_hostname     = "rahul-linux-1"
+  vm_password     = "<your-vm-password>"
+  ssh_public_key  = "ssh-ed25519 AAAAC3...your-key...user@host"
+}
 ```
 
-### 4️⃣ Configure Cloud-Init (userdata.tpl)
 
-Change the username
-
-### 5️⃣ Run Terraform
+### 4️⃣ Run Terraform
 
 ```bash
 terraform init
+
+terraform plan
+or
 terraform plan --var-file="custom.tfvars"
+
+terraform apply
+or
 terraform apply --var-file="custom.tfvars"
 ```
 
@@ -87,7 +98,7 @@ terraform apply --var-file="custom.tfvars"
 
 - User exists in cloud-init
 - lock_passwd: false is set
-- plain_text_passwd: ... is used
+- plain_text_passwd: is configured
 
 🧑‍💻 Best practice: Use SSH keys instead of plain passwords.
 
@@ -96,16 +107,21 @@ terraform apply --var-file="custom.tfvars"
 
 ## 🔧 Future Improvements
 
-- 🔁 Refactor into reusable Terraform modules for multi-VM deployments
-- 📦 Add support for additional disks, ISO-based installs, and resource pools
-- 🔐 Secure secrets with tools like HashiCorp Vault or Mozilla SOPS
-- 🧪 Integrate GitHub Actions for Terraform linting, formatting, and validation
-- 📘 Split and manage `userdata.tpl` via template directories for better readability
-- 🧱 Add post-provisioning steps using Ansible or remote-exec
-- 🛰 Implement DHCP/static IP assignment and DNS registration
-- 🧵 Add VM health checks and `cloud-init status` verification
-- 🎨 Generate architecture diagrams with draw.io or Mermaid for documentation
-- 🔁 Integrate with GitOps tools like ArgoCD or Flux for full lifecycle control
+- 🔁 Support multi-VM creation via for_each
+
+- 📦 Add ISO support, resource pools, and tagging
+
+- 🔐 Vault/SOPS integration for secure secrets
+
+- 🧪 Add unit tests and CI for validation
+
+- 🧱 Enhance cloud-init templates for flexibility
+
+- 🛰 Enable IP configuration and DNS registration
+
+- 🔄 Post-provisioning automation using Ansible or remote-exec
+
+
 
 ---
 
