@@ -42,6 +42,14 @@ variable "vm_password" {
   sensitive   = true
 }
 
+variable "vm_memory" {
+  default = 2048
+}
+
+variable "vm_cpus" {
+  default = 2
+}
+
 variable "ovf_file" {
   
 }

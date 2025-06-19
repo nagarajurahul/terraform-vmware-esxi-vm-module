@@ -12,6 +12,9 @@ resource "esxi_guest" "vm" {
   guest_name         = var.vm_hostname
   disk_store         = var.disk_store
 
+  memsize            = var.vm_memory
+  numvcpus           = var.vm_cpus
+
   network_interfaces {
     virtual_network = var.virtual_network
   }
