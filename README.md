@@ -16,7 +16,7 @@ Designed for **DevOps Engineers**, **Cloud Engineers**, or **Infrastructure Auto
 
 - Accepts:
 
-  - Custom vm_hostname, vm_password, and ssh_public_key
+  - Custom vm_hostname, vm_password, vm_memory, vm_cpus and ssh_public_key
 
   - Disk and virtual network configuration
 
@@ -81,6 +81,8 @@ module "vm" {
   disk_store      = "datastore1"
   vm_hostname     = "rahul-linux-1"
   vm_password     = "<your-vm-password>"
+  vm_memory       = 2048
+  vm_cpus         = 2
   ovf_file        = "noble-server-cloudimg-amd64.ova"
   ssh_public_key  = "ssh-ed25519 AAAAC3...your-key...user@host"
 }
