@@ -1,33 +1,30 @@
 #cloud-config
 
 users:
-  - name: ubuntu
+%{ for username, user in users ~}
+  - name: ${username}
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     shell: /bin/bash
     ssh-authorized-keys:
-      - ${SSH_PUBLIC_KEY}
-
-  - name: rahul
-    shell: /bin/bash
-    sudo: ['ALL=(ALL) NOPASSWD:ALL']
-    ssh-authorized-keys:
-      - ${SSH_PUBLIC_KEY}
+%{ for key in user.ssh_keys ~}
+      - ${key}
+%{ endfor ~}
     lock_passwd: false
-    plain_text_passwd: ${PASSWORD}
+%{ endfor ~}
 
 # Allow password login (required for OVF 'password' to work)
 ssh_pwauth: true
 
-
 chpasswd:
   list: |
-    ubuntu:${PASSWORD}
-    rahul:${PASSWORD}
+%{ for username, user in users ~}
+    ${username}:${user.password}
+%{ endfor ~}
   expire: False
 
 system_info:
   default_user:
-    name: rahul
+    name: ${default_user}
     sudo: ["ALL=(ALL) NOPASSWD:ALL"]
     shell: /bin/bash
 
@@ -36,10 +33,7 @@ packages:
   - git
 
 runcmd:
-  - date >/root/cloudinit.log
   - hostnamectl set-hostname ${HOSTNAME}
-  - echo ${HELLO} >>/root/cloudinit.log
-  - echo "Done cloud-init" >>/root/cloudinit.log
-  - ip a >/dev/tty1
+  - ip a >> /var/log/cloud-init-network.log
   - echo "Welcome to ${HOSTNAME}" > /etc/motd
-  - echo "Initialization complete." >> /var/log/cloud-init-done.log
+  - echo "Cloud Init completed successfully." >> /var/log/cloud-init-done.log
