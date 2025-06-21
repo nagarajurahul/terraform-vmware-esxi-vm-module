@@ -47,13 +47,15 @@ resource "esxi_guest" "vm" {
 
   ovf_properties {
     key = "user-data"
-    value = base64encode(data.template_file.userdata_default.rendered)
+    value = base64encode(local.userdata_rendered)
+    # value = base64encode(data.template_file.userdata_default.rendered)
   }
 
   # Optional: fallback if guestinfo is preferred
   guestinfo = {
     "userdata.encoding" = "gzip+base64"
-    "userdata"          = base64gzip(data.template_file.userdata_default.rendered)
+    "userdata" = base64encode(local.userdata_rendered)
+    # "userdata"          = base64gzip(data.template_file.userdata_default.rendered)
   }
 
   ovf_properties_timer = 90  # give VM time to boot & process OVF props
