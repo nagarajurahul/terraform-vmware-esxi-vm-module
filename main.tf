@@ -3,7 +3,7 @@ data "template_file" "userdata_default" {
   vars = {
     HOSTNAME = var.vm_hostname
     default_user = var.default_user
-    users = var.users
+    json_users = jsonencode(var.users)
   }
 
 }
