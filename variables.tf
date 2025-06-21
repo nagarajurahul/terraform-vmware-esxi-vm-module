@@ -59,7 +59,8 @@ variable "default_user" {
 }
 
 variable "users" {
-  type = map(object({
+    description = "List of users to be passed to the template"
+    type = map(object({
     password = string
     ssh_keys   = list(string)
   }))

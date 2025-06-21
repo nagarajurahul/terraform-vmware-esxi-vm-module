@@ -5,6 +5,7 @@ data "template_file" "userdata_default" {
     default_user = var.default_user
     users = var.users
   }
+
 }
 
 resource "esxi_guest" "vm" {
