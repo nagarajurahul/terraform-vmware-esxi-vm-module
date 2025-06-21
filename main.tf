@@ -2,9 +2,8 @@ data "template_file" "userdata_default" {
   template = file("${path.module}/userdata.tpl")
   vars = {
     HOSTNAME = var.vm_hostname
-    HELLO    = "Hello ESXi World!"
-    SSH_PUBLIC_KEY = var.ssh_public_key
-    PASSWORD = var.vm_password
+    default_user = var.default_user
+    users = var.users
   }
 }
 
