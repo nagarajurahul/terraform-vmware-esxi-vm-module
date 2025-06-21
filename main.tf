@@ -1,11 +1,19 @@
-data "template_file" "userdata_default" {
-  template = file("${path.module}/userdata.tpl")
-  vars = {
-    HOSTNAME = var.vm_hostname
-    default_user = var.default_user
-    json_users = jsonencode(var.users)
-  }
+# data "template_file" "userdata_default" {
+#   template = file("${path.module}/userdata.tpl")
+#   vars = {
+#     HOSTNAME = var.vm_hostname
+#     default_user = var.default_user
+#     json_users = jsonencode(var.users)
+#   }
 
+# }
+
+locals {
+  userdata_rendered = templatefile("${path.module}/userdata.tpl", {
+    HOSTNAME     = var.vm_hostname
+    default_user = var.default_user
+    users        = var.users   # No need to jsonencode here!
+  })
 }
 
 resource "esxi_guest" "vm" {

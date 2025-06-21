@@ -1,5 +1,5 @@
 #cloud-config
-%{ set users = jsondecode(json_users) }
+# %{ set users = jsondecode(json_users) }
 
 users:
 %{ for username, user in users ~}
