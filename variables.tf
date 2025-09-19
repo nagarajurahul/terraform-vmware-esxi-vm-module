@@ -54,6 +54,14 @@ variable "ovf_file" {
   
 }
 
-variable "ssh_public_key" {
-  sensitive   = true
+variable "default_user" {
+  sensitive = true
+}
+
+variable "users" {
+    description = "List of users to be passed to the template"
+    type = map(object({
+    password = string
+    ssh_keys   = list(string)
+  }))
 }
