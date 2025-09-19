@@ -1,6 +1,6 @@
 # 🚀 ESXi VM Provisioning with Terraform + OVA + Cloud-Init
 
-This project provides a **reusable Terraform module** to **automatically provision virtual machines on an ESXi hypervisor** using:
+This project provides a **reusable Terraform module** to **automatically provision virtual machines on a free ESXi hypervisor** using:
 
 - ✅ **Terraform** (with [`josenk/terraform-provider-esxi` provider])
 - ✅ **OVA/OVF cloud images** (Ubuntu Cloud-Ready)
@@ -30,7 +30,8 @@ Designed for **DevOps Engineers**, **Cloud Engineers**, or **Infrastructure Auto
 
   - guestinfo.userdata (gzip+base64 fallback)
 
-- Does not include provider block — expected to be defined in the parent Terraform configuration
+
+`Note`: Does not include provider block — expected to be defined in the parent Terraform configuration
 
 ---
 
@@ -54,7 +55,7 @@ Get Ubuntu cloud images:
 wget https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.ova
 ```
 
-### 2️⃣ Define the provider (in parent project)
+### 2️⃣ Define the provider in provider.tf (in parent project)
 
 ```bash
 provider "esxi" {
